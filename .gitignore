@@ -1,0 +1,9 @@
+node_modules
+.next
+.env
+.env.local
+*.log
+public/uploads/audio/*
+public/uploads/images/*
+!public/uploads/audio/.gitkeep
+!public/uploads/images/.gitkeep

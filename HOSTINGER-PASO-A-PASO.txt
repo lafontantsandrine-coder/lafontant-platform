@@ -1,0 +1,12 @@
+LAFONTANT PLATFORM V1
+
+1. En Hostinger elige "Upload your files".
+2. Sube el ZIP completo.
+3. Framework: Next.js / Node.js.
+4. Node version: 20.
+5. Build command: npm run build
+6. Start command: npm run start
+7. Cuando aparezcan las variables de entorno, toma una captura.
+8. No pongas claves todavía.
+9. La IA y Stripe seguirán en modo prueba.
+10. La base de datos PostgreSQL la configuraremos juntos.

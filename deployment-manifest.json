@@ -1,0 +1,13 @@
+{
+  "project": "lafontant-platform",
+  "version": "1.0.1",
+  "framework": "Next.js",
+  "node": "20",
+  "build_command": "npm run build",
+  "start_command": "npm run start",
+  "database": "PostgreSQL",
+  "ai_demo_mode": true,
+  "fixes": [
+    "JWT SessionPayload now extends jose JWTPayload"
+  ]
+}

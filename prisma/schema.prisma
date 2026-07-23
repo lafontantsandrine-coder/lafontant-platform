@@ -1,0 +1,166 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  name         String?
+  passwordHash String?
+  role         Role        @default(STUDENT)
+  progress     Progress[]
+  submissions  Submission[]
+  certificates Certificate[]
+  pointTransactions PointTransaction[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Language {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  levels    Level[]
+  createdAt DateTime @default(now())
+}
+
+model Level {
+  id         String   @id @default(cuid())
+  number     Int
+  cefr       String?
+  languageId String
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  units      Unit[]
+
+  @@unique([languageId, number])
+}
+
+model Unit {
+  id          String        @id @default(cuid())
+  number      Int
+  slug        String
+  title       String
+  subtitle    String?
+  status      PublishStatus @default(DRAFT)
+  levelId     String
+  level       Level         @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([levelId, number])
+  @@unique([levelId, slug])
+}
+
+model Lesson {
+  id          String       @id @default(cuid())
+  section     String
+  title       String
+  order       Int
+  contentJson String
+  unitId      String
+  unit        Unit         @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  progress    Progress[]
+  media       MediaAsset[]
+
+  @@unique([unitId, section])
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  type      String
+  url       String
+  fileName  String
+  altText   String?
+  lessonId  String?
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+}
+
+model Progress {
+  id          String   @id @default(cuid())
+  userId      String
+  lessonId    String
+  percent     Int      @default(0)
+  score       Int?
+  completedAt DateTime?
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
+
+
+model Submission {
+  id           String   @id @default(cuid())
+  type         String
+  prompt       String
+  originalText String?
+  transcript   String?
+  feedbackJson String
+  score        Int?
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+}
+
+
+model LiveClass {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  startsAt        DateTime
+  durationMinutes Int
+  meetingUrl      String
+  levelId         String?
+  createdAt       DateTime @default(now())
+}
+
+model Homework {
+  id           String   @id @default(cuid())
+  title        String
+  instructions String
+  dueAt        DateTime
+  points       Int
+  lessonId     String?
+  createdAt    DateTime @default(now())
+}
+
+model Certificate {
+  id               String   @id @default(cuid())
+  title            String
+  levelLabel       String
+  verificationCode String   @unique
+  issuedAt         DateTime @default(now())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PointTransaction {
+  id        String   @id @default(cuid())
+  points    Int
+  reason    String
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
