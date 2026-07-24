@@ -1,6 +1,6 @@
-
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
+import { LogoutButton } from "@/components/LogoutButton";
 
 export async function AppHeader() {
   const session = await getSession();
@@ -8,23 +8,30 @@ export async function AppHeader() {
   return (
     <header className="topbar">
       <Link href="/" className="brand">Lafontant <span>Learning</span></Link>
+
       <nav className="nav">
-        <Link href="/courses">Courses</Link>
-        {session && <Link href="/dashboard">Dashboard</Link>}
-        {session && <Link href="/ai/writing">Writing AI</Link>}
+        <Link href="/courses">Cursos</Link>
 
-        {session && <Link href="/live-classes">Live classes</Link>}
-        {session && <Link href="/homework">Homework</Link>}
-        {session && <Link href="/gamification">Achievements</Link>}
+        {session ? (
+          <>
+            <Link href="/dashboard">Mi espacio</Link>
 
-        {session && <Link href="/ai/speaking">Speaking AI</Link>}
-        {session && ["TEACHER","ADMIN","SUPER_ADMIN"].includes(session.role) && (
-          <Link href="/teacher">Teacher</Link>
+            {["TEACHER", "ADMIN", "SUPER_ADMIN"].includes(session.role) && (
+              <Link href="/teacher">Profesor</Link>
+            )}
+
+            {["ADMIN", "SUPER_ADMIN"].includes(session.role) && (
+              <Link href="/admin">Administración</Link>
+            )}
+
+            <LogoutButton />
+          </>
+        ) : (
+          <>
+            <Link href="/login">Iniciar sesión</Link>
+            <Link className="nav-register" href="/register">Crear cuenta</Link>
+          </>
         )}
-        {session && ["ADMIN","SUPER_ADMIN"].includes(session.role) && (
-          <Link href="/admin">Admin</Link>
-        )}
-        {!session ? <Link href="/login">Login</Link> : <span style={{padding:"10px 12px"}}>{session.email}</span>}
       </nav>
     </header>
   );
