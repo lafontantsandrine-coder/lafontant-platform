@@ -37,11 +37,7 @@ export default function RegisterPage() {
     const data = await response.json();
 
     if (!response.ok) {
-      setError(
-        typeof data.error === "string"
-          ? data.error
-          : "No pudimos crear la cuenta."
-      );
+      setError(typeof data.error === "string" ? data.error : "No pudimos crear la cuenta.");
       setLoading(false);
       return;
     }
@@ -55,7 +51,7 @@ export default function RegisterPage() {
       <section className="auth-card">
         <span className="badge">7 días de prueba</span>
         <h1>Crea tu cuenta</h1>
-        <p className="muted">Empieza como estudiante. Los otros roles se asignan desde administración.</p>
+        <p className="muted">Empieza como estudiante y descubre la plataforma.</p>
 
         <form className="form" onSubmit={submit}>
           <div className="field">
@@ -86,7 +82,7 @@ export default function RegisterPage() {
         </form>
 
         <p className="auth-footer">
-          ¿Ya tienes una cuenta? <Link href="/login">Iniciar sesión</Link>
+          ¿Ya tienes cuenta? <Link href="/login">Iniciar sesión</Link>
         </p>
       </section>
     </main>

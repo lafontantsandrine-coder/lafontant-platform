@@ -8,12 +8,7 @@ export default async function ProfilePage() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.userId },
-    select: {
-      name: true,
-      email: true,
-      role: true,
-      createdAt: true
-    }
+    select: { name: true, email: true, role: true, createdAt: true }
   });
 
   return (
@@ -23,20 +18,9 @@ export default async function ProfilePage() {
         <h1>Mi perfil</h1>
 
         <div className="profile-grid">
-          <div>
-            <small>Nombre</small>
-            <strong>{user?.name || "Sin nombre"}</strong>
-          </div>
-
-          <div>
-            <small>Correo</small>
-            <strong>{user?.email}</strong>
-          </div>
-
-          <div>
-            <small>Miembro desde</small>
-            <strong>{user?.createdAt.toLocaleDateString("es-MX")}</strong>
-          </div>
+          <div><small>Nombre</small><strong>{user?.name || "Sin nombre"}</strong></div>
+          <div><small>Correo</small><strong>{user?.email}</strong></div>
+          <div><small>Miembro desde</small><strong>{user?.createdAt.toLocaleDateString("es-MX")}</strong></div>
         </div>
       </section>
     </main>

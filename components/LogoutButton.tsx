@@ -7,7 +7,7 @@ export function LogoutButton() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  async function logout() {
+  async function handleLogout() {
     setLoading(true);
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/");
@@ -15,7 +15,7 @@ export function LogoutButton() {
   }
 
   return (
-    <button className="nav-logout" type="button" onClick={logout} disabled={loading}>
+    <button className="nav-logout" type="button" onClick={handleLogout} disabled={loading}>
       {loading ? "Saliendo..." : "Cerrar sesión"}
     </button>
   );

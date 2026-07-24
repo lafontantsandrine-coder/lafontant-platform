@@ -1,0 +1,10 @@
+1. Cierra GitHub Desktop.
+2. Abre C:\Lafontant\lafontant-platform.
+3. Activa Ver > Mostrar > Elementos ocultos.
+4. NO borres la carpeta oculta .git.
+5. Borra el resto del contenido.
+6. Copia aquí todo el contenido de este paquete.
+7. Abre GitHub Desktop.
+8. Debe detectar muchos cambios y el archivo nuevo VERSION.txt.
+9. Commit: v1.1.1 - Authentication foundation
+10. Push origin.

@@ -8,9 +8,7 @@ export const metadata: Metadata = {
   description: "Plataforma progresiva para aprender inglés y francés."
 };
 
-export default function RootLayout({
-  children
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
       <body>

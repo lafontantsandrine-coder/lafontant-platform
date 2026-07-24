@@ -28,11 +28,7 @@ export default function LoginPage() {
     const data = await response.json();
 
     if (!response.ok) {
-      setError(
-        typeof data.error === "string"
-          ? data.error
-          : "No pudimos iniciar sesión. Revisa tus datos."
-      );
+      setError(typeof data.error === "string" ? data.error : "No pudimos iniciar sesión.");
       setLoading(false);
       return;
     }
@@ -56,13 +52,7 @@ export default function LoginPage() {
 
           <div className="field">
             <label>Contraseña</label>
-            <input
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              minLength={8}
-            />
+            <input name="password" type="password" autoComplete="current-password" required minLength={8} />
           </div>
 
           <div className="auth-row">

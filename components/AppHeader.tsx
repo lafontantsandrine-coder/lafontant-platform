@@ -7,7 +7,9 @@ export async function AppHeader() {
 
   return (
     <header className="topbar">
-      <Link href="/" className="brand">Lafontant <span>Learning</span></Link>
+      <Link href="/" className="brand">
+        Lafontant <span>Learning</span>
+      </Link>
 
       <nav className="nav">
         <Link href="/courses">Cursos</Link>
@@ -15,15 +17,13 @@ export async function AppHeader() {
         {session ? (
           <>
             <Link href="/dashboard">Mi espacio</Link>
-
             {["TEACHER", "ADMIN", "SUPER_ADMIN"].includes(session.role) && (
               <Link href="/teacher">Profesor</Link>
             )}
-
             {["ADMIN", "SUPER_ADMIN"].includes(session.role) && (
               <Link href="/admin">Administración</Link>
             )}
-
+            <Link href="/profile">Perfil</Link>
             <LogoutButton />
           </>
         ) : (

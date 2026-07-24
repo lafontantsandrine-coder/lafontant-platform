@@ -29,23 +29,16 @@ export default function ForgotPasswordPage() {
 
         {sent ? (
           <>
-            <p>
-              Si existe una cuenta con ese correo, enviaremos las instrucciones
-              cuando el servicio de correo quede activado.
-            </p>
-            <Link className="btn btn-primary auth-submit" href="/login">
-              Volver al login
-            </Link>
+            <p>Si existe una cuenta con ese correo, recibirás instrucciones cuando activemos el servicio de correo.</p>
+            <Link className="btn btn-primary auth-submit" href="/login">Volver al login</Link>
           </>
         ) : (
           <form className="form" onSubmit={submit}>
             <p className="muted">Escribe el correo asociado con tu cuenta.</p>
-
             <div className="field">
               <label>Correo electrónico</label>
               <input name="email" type="email" required />
             </div>
-
             <button className="btn btn-primary auth-submit" disabled={loading}>
               {loading ? "Procesando..." : "Enviar instrucciones"}
             </button>
