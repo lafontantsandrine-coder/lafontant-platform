@@ -7,3 +7,6 @@ export * from "./animations";
 export * from "./theme";
 export * from "./tokens";
 export * from "./icons";
+export { default as Card } from "../components/ui/Card";
+export { default as Badge } from "../components/ui/Badge";
+export { default as Container } from "../components/ui/Container";

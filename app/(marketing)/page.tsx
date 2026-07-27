@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { Card } from "@/design-system";
+import { Badge } from "@/design-system";
+import { Container } from "@/design-system";
 
 export default function HomePage() {
   return (
-    <main className="container">
+    <Container>
       <section className="hero">
-        <span className="badge">Versión 1.1.1</span>
+        <Badge>Versión 1.1.1</Badge>
         <h1>El idioma se adapta a tu vida, no al revés.</h1>
         <p>
           Aprende inglés y francés con lecciones progresivas, audio natural,
@@ -18,10 +21,21 @@ export default function HomePage() {
       </section>
 
       <section className="grid">
-        <article className="card"><h3>Aprendizaje progresivo</h3><p className="muted">Continúa desde tu última actividad.</p></article>
-        <article className="card"><h3>Audio natural</h3><p className="muted">Preparado para audios creados con SuitBlaster.</p></article>
-        <article className="card"><h3>Práctica con IA</h3><p className="muted">Speaking y Writing con retroalimentación.</p></article>
-      </section>
-    </main>
+  <Card>
+    <h3>Aprendizaje progresivo</h3>
+    <p className="muted">Continúa desde tu última actividad.</p>
+  </Card>
+
+  <Card>
+    <h3>Audio natural</h3>
+    <p className="muted">Preparado para audios creados con SuitBlaster.</p>
+  </Card>
+
+  <Card>
+    <h3>Práctica con IA</h3>
+    <p className="muted">Speaking y Writing con retroalimentación.</p>
+  </Card>
+</section>
+    </Container>
   );
 }

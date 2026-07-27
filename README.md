@@ -1,11 +1,25 @@
-# Lafontant Learning Platform v1
+# Lafontant Learning Platform
 
-Raíz limpia para Hostinger.
+Plataforma premium para el aprendizaje de idiomas.
 
-- Node.js 20
-- Build: npm run build
-- Start: npm run start
-- Database: PostgreSQL
-- AI demo mode: true
+## Tecnologías
 
-Lee `HOSTINGER-PASO-A-PASO.txt`.
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Prisma
+- PostgreSQL
+- Supabase
+
+## Requisitos
+
+- Node.js 20+
+- npm
+
+## Desarrollo local
+
+```bash
+npm install
+npm run dev
+```

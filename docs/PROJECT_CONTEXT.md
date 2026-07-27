@@ -1,5 +1,10 @@
 # Lafontant Learning Platform
 
+# Status
+
+Production Stage: Development
+Current Version: v1.1.1
+
 ## Project Vision
 
 Lafontant Learning Platform is a premium language learning platform.
@@ -180,17 +185,7 @@ GitHub
 
 Cursor
 
----
-
-## Roles
-
-Student
-
-Teacher
-
-Administrator
-
-Super Administrator
+Tailwind CSS
 
 ---
 
@@ -211,3 +206,13 @@ Course Builder
 Analytics
 
 Teacher Portal
+
+Gamification
+
+Placement Test
+
+Learning Analytics
+
+Online Scheduling
+
+Marketplace (Future)

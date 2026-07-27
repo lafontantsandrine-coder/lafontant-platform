@@ -1,10 +1,11 @@
 
 import Link from "next/link";
 import type { UnitData } from "@/types";
+import { Card } from "@/design-system";
 
 export function UnitCard({ unit }: { unit: UnitData }) {
   return (
-    <article className="card">
+    <Card>
       <span className="badge">{unit.status}</span>
       <h3 style={{ marginTop: 14 }}>{unit.title}</h3>
       <p className="muted">{unit.subtitle}</p>
@@ -16,6 +17,6 @@ export function UnitCard({ unit }: { unit: UnitData }) {
       >
         Open unit
       </Link>
-    </article>
+    </Card>
   );
 }

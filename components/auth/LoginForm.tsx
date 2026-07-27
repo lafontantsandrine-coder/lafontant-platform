@@ -16,7 +16,7 @@ export default function LoginForm() {
       title="Continúa aprendiendo."
       description="Ingresa a tu cuenta para retomar tu progreso."
     >
-      <form className="space-y-4">
+      <form className="flex w-full flex-col gap-5">
         {/* Email field */}
         <Input
           id="email"
@@ -26,6 +26,7 @@ export default function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
+          fullWidth
         />
 
         {/* Password field */}
@@ -37,10 +38,11 @@ export default function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           autoComplete="current-password"
+          fullWidth
         />
 
         {/* Forgot password link */}
-        <div className="text-right -mt-1">
+        <div className="-mt-1 text-right">
           <a
             href="/auth/forgot-password"
             className="text-xs font-bold text-indigo-600 hover:opacity-80 transition"
@@ -60,18 +62,20 @@ export default function LoginForm() {
       </form>
 
       {/* Social buttons */}
-      <SocialButtons dividerText="o">
-        <Button
-          type="button"
-          variant="outline"
-          fullWidth
-        >
-          Continuar con Google
-        </Button>
-      </SocialButtons>
+      <div className="mt-6">
+        <SocialButtons dividerText="o">
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth
+          >
+            Continuar con Google
+          </Button>
+        </SocialButtons>
+      </div>
 
       {/* Meta text */}
-      <div className="mt-[22px] text-center text-gray-500 text-sm">
+      <div className="mt-6 text-center text-sm text-gray-500">
         ¿Aún no tienes cuenta?{' '}
         <a
           href="/auth/register"
