@@ -2,7 +2,13 @@ import Image from 'next/image';
 
 export default function AuthHero() {
   return (
-    <section className="hidden lg:flex lg:min-h-screen lg:flex-col lg:justify-between relative overflow-hidden bg-gradient-to-br from-[#050816] via-[#0b1024] to-[#0b1024] p-11 text-white">
+    <section
+      className="hidden lg:flex lg:min-h-screen lg:flex-col lg:justify-between relative overflow-hidden p-11 text-white"
+      style={{
+        backgroundImage:
+          'radial-gradient(1200px 600px at 12% -8%, rgba(243,223,152,0.22) 0%, rgba(243,223,152,0) 58%), radial-gradient(900px 520px at 92% 108%, rgba(111,81,255,0.22) 0%, rgba(111,81,255,0) 62%), linear-gradient(135deg, #050816 0%, #0b1024 52%, #0b1024 100%)',
+      }}
+    >
       {/* Grid background effect */}
       <div
         className="absolute inset-0 opacity-10"
@@ -17,11 +23,11 @@ export default function AuthHero() {
       {/* Brand */}
       <div className="relative z-10 flex items-center gap-3">
         <Image
-          src="/logo-lafontant.png"
+          src="/uploads/images/lafontant-logo.png"
           alt="Lafontant"
           width={230}
           height={72}
-          className="h-auto w-auto max-w-[230px]"
+          className="h-[72px] w-[230px] object-contain"
           priority
         />
       </div>

@@ -1,15 +1,14 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import AuthHero from '@/components/auth/AuthHero';
 
-interface AuthLayoutProps {
-  children: ReactNode;
-}
-
-export default function AuthLayout({ children }: AuthLayoutProps) {
+export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8 py-12">
-      <div className="w-full max-w-md">
+    <main className="min-h-screen lg:grid lg:grid-cols-[1.05fr_0.95fr]">
+      <AuthHero />
+
+      <section className="flex min-h-screen items-center justify-center">
         {children}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
