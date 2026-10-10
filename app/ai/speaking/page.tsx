@@ -43,7 +43,7 @@ export default function SpeakingAIPage() {
         if (!response.ok) throw new Error("feedback request failed");
         setResult(await response.json());
       } catch {
-        setError("Your recording is safe, but I couldn't analyze it right now. Please try again.");
+        setError("I couldn't analyze that recording right now. Please record your answer again and retry.");
       } finally {
         setLoading(false);
         recorder.current?.stream.getTracks().forEach((track) => track.stop());
@@ -57,7 +57,7 @@ export default function SpeakingAIPage() {
     <main className="container">
       <h1>Speaking AI</h1>
       <section className="card">
-        <div style={{ display: "flex", gap: 20, alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", gap: 20, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}>
           <div style={{ flex: 1 }}>
             <h3>Describe one healthy habit you have changed recently.</h3>
             <button className="btn btn-primary" onClick={recording ? stop : start} disabled={loading}>
