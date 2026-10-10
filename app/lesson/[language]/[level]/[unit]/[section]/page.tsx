@@ -4,6 +4,16 @@ import { LessonSidebar } from "@/components/LessonSidebar";
 import { AudioButton } from "@/components/AudioButton";
 import { LessonProgressBridge } from "@/components/lesson/LessonProgressBridge";
 
+const gradedSections = new Set([
+  "vocabulary-practice",
+  "grammar-practice",
+  "listening",
+  "reading",
+  "speaking",
+  "writing",
+  "exit-ticket"
+]);
+
 export default async function LessonSectionPage({
   params
 }: {
@@ -14,6 +24,7 @@ export default async function LessonSectionPage({
   if (!data) notFound();
 
   const lessonId = `${language}-${level}-${unit}-${section}`;
+  const isGradedSection = gradedSections.has(section);
 
   return (
     <main className="container lesson-layout">
@@ -46,7 +57,7 @@ export default async function LessonSectionPage({
           </article>
         )}
 
-        {section === "exit-ticket" && <LessonProgressBridge lessonId={lessonId} />}
+        {isGradedSection && <LessonProgressBridge lessonId={lessonId} />}
       </section>
     </main>
   );
