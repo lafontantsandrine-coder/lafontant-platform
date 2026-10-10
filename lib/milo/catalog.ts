@@ -16,6 +16,7 @@ export type MiloState =
   | "unlock"
   | "calendar"
   | "trophy"
+  | "traveler"
   | "error"
   | "connection"
   | "loading"
@@ -52,6 +53,7 @@ export const MILO_ASSETS: Record<MiloState, MiloAsset> = {
   unlock: { state: "unlock", src: `${base}/navigation/milo-unlock.png`, alt: "Milo unlocking the next activity", status: "ready", purpose: "Unlock feedback" },
   calendar: { state: "calendar", src: `${base}/learning/milo-calendar.png`, alt: "Milo with a calendar", status: "ready", purpose: "Calendar and deadlines" },
   trophy: { state: "trophy", src: `${base}/rewards/milo-trophy.png`, alt: "Milo with a trophy", status: "ready", purpose: "Rewards and certificates" },
+  traveler: { state: "traveler", src: `${base}/maps/milo-traveler.png`, alt: "Milo traveling through the course map", status: "ready", purpose: "Persistent player marker that moves from point to point on platform course maps" },
 
   // Pending assets are deliberately registered before UI integration so no page invents a one-off Milo.
   error: { state: "error", src: `${base}/system/milo-error.png`, alt: "Milo showing a friendly error", status: "pending", purpose: "Recoverable errors" },
