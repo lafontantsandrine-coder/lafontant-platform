@@ -8,6 +8,7 @@ export function MiloCourseMapMarker({
   arriving?: boolean;
 }) {
   const traveler = getMiloAsset("traveler");
+  if (traveler.status !== "ready") return null;
 
   return (
     <div
