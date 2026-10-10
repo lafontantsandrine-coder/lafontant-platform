@@ -36,35 +36,36 @@ export type MiloAsset = {
 };
 
 const base = "/assets/mascot/milo";
+const pending = (state: MiloState, src: string, alt: string, purpose: string): MiloAsset => ({ state, src, alt, status: "pending", purpose });
 
+// IMPORTANT: an asset is only marked ready after its PNG is physically verified in /public.
+// This prevents registered-but-missing mascot paths from producing broken images in production.
 export const MILO_ASSETS: Record<MiloState, MiloAsset> = {
-  welcome: { state: "welcome", src: `${base}/welcome/milo-welcome.png`, alt: "Milo welcoming the student", status: "ready", purpose: "General welcome" },
-  pointingRight: { state: "pointingRight", src: `${base}/navigation/milo-pointing-right.png`, alt: "Milo pointing to the next step", status: "ready", purpose: "Navigation and next step" },
-  explaining: { state: "explaining", src: `${base}/learning/milo-explaining.png`, alt: "Milo explaining", status: "ready", purpose: "Explanations and tips" },
-  thinking: { state: "thinking", src: `${base}/learning/milo-thinking.png`, alt: "Milo thinking", status: "ready", purpose: "AI analysis and reflection" },
-  listening: { state: "listening", src: `${base}/skills/milo-listening.png`, alt: "Milo listening", status: "ready", purpose: "Listening activities" },
-  reading: { state: "reading", src: `${base}/skills/milo-reading.png`, alt: "Milo reading", status: "ready", purpose: "Reading activities" },
-  speaking: { state: "speaking", src: `${base}/skills/milo-speaking.png`, alt: "Milo speaking", status: "ready", purpose: "Speaking activities" },
-  writing: { state: "writing", src: `${base}/skills/milo-writing.png`, alt: "Milo writing", status: "ready", purpose: "Writing activities" },
-  recording: { state: "recording", src: `${base}/skills/milo-recording.png`, alt: "Milo recording audio", status: "ready", purpose: "Audio recording" },
-  correct: { state: "correct", src: `${base}/feedback/milo-correct.png`, alt: "Milo celebrating a correct answer", status: "ready", purpose: "Positive feedback" },
-  tryAgain: { state: "tryAgain", src: `${base}/feedback/milo-try-again.png`, alt: "Milo encouraging another try", status: "ready", purpose: "Retry feedback" },
-  celebrating: { state: "celebrating", src: `${base}/feedback/milo-celebrating.png`, alt: "Milo celebrating", status: "ready", purpose: "Milestones" },
-  unlock: { state: "unlock", src: `${base}/navigation/milo-unlock.png`, alt: "Milo unlocking the next activity", status: "ready", purpose: "Unlock feedback" },
-  calendar: { state: "calendar", src: `${base}/learning/milo-calendar.png`, alt: "Milo with a calendar", status: "ready", purpose: "Calendar and deadlines" },
-  trophy: { state: "trophy", src: `${base}/rewards/milo-trophy.png`, alt: "Milo with a trophy", status: "ready", purpose: "Rewards and certificates" },
-  traveler: { state: "traveler", src: `${base}/maps/milo-traveler.png`, alt: "Milo traveling through the course map", status: "ready", purpose: "Persistent player marker that moves from point to point on platform course maps" },
-
-  // Pending assets are deliberately registered before UI integration so no page invents a one-off Milo.
-  error: { state: "error", src: `${base}/system/milo-error.png`, alt: "Milo showing a friendly error", status: "pending", purpose: "Recoverable errors" },
-  connection: { state: "connection", src: `${base}/system/milo-connection.png`, alt: "Milo checking the connection", status: "pending", purpose: "Network problems" },
-  loading: { state: "loading", src: `${base}/system/milo-loading.png`, alt: "Milo waiting while the platform loads", status: "pending", purpose: "Loading and AI processing" },
-  streak: { state: "streak", src: `${base}/rewards/milo-streak.png`, alt: "Milo celebrating a learning streak", status: "pending", purpose: "Streaks" },
-  locked: { state: "locked", src: `${base}/navigation/milo-locked.png`, alt: "Milo beside a locked activity", status: "pending", purpose: "Locked activities" },
-  almostThere: { state: "almostThere", src: `${base}/feedback/milo-almost-there.png`, alt: "Milo encouraging the student who is almost there", status: "pending", purpose: "Near mastery feedback" },
-  perfectScore: { state: "perfectScore", src: `${base}/rewards/milo-perfect-score.png`, alt: "Milo celebrating a perfect score", status: "pending", purpose: "100 out of 100" },
-  dailyWelcome: { state: "dailyWelcome", src: `${base}/welcome/milo-daily-welcome.png`, alt: "Milo welcoming the student back", status: "pending", purpose: "Daily welcome" },
-  birthday: { state: "birthday", src: `${base}/seasonal/milo-birthday.png`, alt: "Milo celebrating a birthday", status: "pending", purpose: "Birthday celebration" }
+  welcome: pending("welcome", `${base}/welcome/milo-welcome.png`, "Milo welcoming the student", "General welcome"),
+  pointingRight: pending("pointingRight", `${base}/navigation/milo-pointing-right.png`, "Milo pointing to the next step", "Navigation and next step"),
+  explaining: pending("explaining", `${base}/learning/milo-explaining.png`, "Milo explaining", "Explanations and tips"),
+  thinking: pending("thinking", `${base}/learning/milo-thinking.png`, "Milo thinking", "AI analysis and reflection"),
+  listening: pending("listening", `${base}/skills/milo-listening.png`, "Milo listening", "Listening activities"),
+  reading: pending("reading", `${base}/skills/milo-reading.png`, "Milo reading", "Reading activities"),
+  speaking: pending("speaking", `${base}/skills/milo-speaking.png`, "Milo speaking", "Speaking activities"),
+  writing: pending("writing", `${base}/skills/milo-writing.png`, "Milo writing", "Writing activities"),
+  recording: pending("recording", `${base}/skills/milo-recording.png`, "Milo recording audio", "Audio recording"),
+  correct: pending("correct", `${base}/feedback/milo-correct.png`, "Milo celebrating a correct answer", "Positive feedback"),
+  tryAgain: pending("tryAgain", `${base}/feedback/milo-try-again.png`, "Milo encouraging another try", "Retry feedback"),
+  celebrating: pending("celebrating", `${base}/feedback/milo-celebrating.png`, "Milo celebrating", "Milestones"),
+  unlock: pending("unlock", `${base}/navigation/milo-unlock.png`, "Milo unlocking the next activity", "Unlock feedback"),
+  calendar: pending("calendar", `${base}/learning/milo-calendar.png`, "Milo with a calendar", "Calendar and deadlines"),
+  trophy: pending("trophy", `${base}/rewards/milo-trophy.png`, "Milo with a trophy", "Rewards and certificates"),
+  traveler: pending("traveler", `${base}/maps/milo-traveler.png`, "Milo traveling through the course map", "Persistent player marker that moves from point to point on platform course maps"),
+  error: pending("error", `${base}/system/milo-error.png`, "Milo showing a friendly error", "Recoverable errors"),
+  connection: pending("connection", `${base}/system/milo-connection.png`, "Milo checking the connection", "Network problems"),
+  loading: pending("loading", `${base}/system/milo-loading.png`, "Milo waiting while the platform loads", "Loading and AI processing"),
+  streak: pending("streak", `${base}/rewards/milo-streak.png`, "Milo celebrating a learning streak", "Streaks"),
+  locked: pending("locked", `${base}/navigation/milo-locked.png`, "Milo beside a locked activity", "Locked activities"),
+  almostThere: pending("almostThere", `${base}/feedback/milo-almost-there.png`, "Milo encouraging the student who is almost there", "Near mastery feedback"),
+  perfectScore: pending("perfectScore", `${base}/rewards/milo-perfect-score.png`, "Milo celebrating a perfect score", "100 out of 100"),
+  dailyWelcome: pending("dailyWelcome", `${base}/welcome/milo-daily-welcome.png`, "Milo welcoming the student back", "Daily welcome"),
+  birthday: pending("birthday", `${base}/seasonal/milo-birthday.png`, "Milo celebrating a birthday", "Birthday celebration")
 };
 
 export const MILO_PENDING_ASSETS = Object.values(MILO_ASSETS).filter((asset) => asset.status === "pending");
