@@ -5,6 +5,8 @@ export type CourseMapProgress = {
   lessonId: string;
   percent: number;
   score?: number | null;
+  bestScore?: number | null;
+  attempts?: number;
   completedAt?: Date | string | null;
 };
 
@@ -23,9 +25,8 @@ export type CourseMapPosition = {
 
 /**
  * Resolves Traveler Milo's persisted position from lesson progress.
- * The first unfinished/unpassed lesson is current; everything after it is locked.
- * A score >= 80 is considered mastery. A fully completed lesson is also considered passed.
- * Attempt-count based forced advancement will be added once attempts are persisted in the data model.
+ * Backend completion is authoritative because it already applies the 80-point / two-attempt rule.
+ * bestScore is used for mastery; percent alone never unlocks a graded node.
  */
 export function resolveCourseMapPosition(
   nodes: CourseMapNode[],
@@ -37,17 +38,18 @@ export function resolveCourseMapPosition(
   let currentIndex = ordered.findIndex((node) => {
     const item = byLesson.get(node.id);
     if (!item) return true;
-    const mastered = typeof item.score === "number" && item.score >= COURSE_MAP_PASS_SCORE;
-    const completed = item.percent >= 100 || Boolean(item.completedAt);
-    return !mastered && !completed;
+    const effectiveScore = item.bestScore ?? item.score;
+    const mastered = typeof effectiveScore === "number" && effectiveScore >= COURSE_MAP_PASS_SCORE;
+    const advancedAfterAttempts = Boolean(item.completedAt) && (item.attempts ?? 0) >= COURSE_MAP_MAX_ATTEMPTS_BEFORE_ADVANCE;
+    return !mastered && !advancedAfterAttempts;
   });
 
-  if (currentIndex === -1) currentIndex = Math.max(ordered.length - 1, 0);
+  if (currentIndex === -1) currentIndex = ordered.length;
   const currentNodeId = ordered[currentIndex]?.id ?? null;
   const nodeStates: Record<string, CourseMapNodeState> = {};
 
   ordered.forEach((node, index) => {
-    if (index < currentIndex) nodeStates[node.id] = "completed";
+    if (currentIndex >= ordered.length || index < currentIndex) nodeStates[node.id] = "completed";
     else if (index === currentIndex) nodeStates[node.id] = "current";
     else nodeStates[node.id] = "locked";
   });
