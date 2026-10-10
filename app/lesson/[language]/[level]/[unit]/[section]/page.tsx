@@ -1,8 +1,8 @@
-
 import { notFound } from "next/navigation";
 import { getUnit } from "@/lib/mock-data";
 import { LessonSidebar } from "@/components/LessonSidebar";
 import { AudioButton } from "@/components/AudioButton";
+import { LessonProgressBridge } from "@/components/lesson/LessonProgressBridge";
 
 export default async function LessonSectionPage({
   params
@@ -12,6 +12,8 @@ export default async function LessonSectionPage({
   const { language, level, unit, section } = await params;
   const data = getUnit(language, Number(level), Number(unit));
   if (!data) notFound();
+
+  const lessonId = `${language}-${level}-${unit}-${section}`;
 
   return (
     <main className="container lesson-layout">
@@ -43,6 +45,8 @@ export default async function LessonSectionPage({
             </p>
           </article>
         )}
+
+        {section === "exit-ticket" && <LessonProgressBridge lessonId={lessonId} />}
       </section>
     </main>
   );
