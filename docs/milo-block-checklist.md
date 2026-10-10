@@ -31,6 +31,7 @@ This file is the source of truth for closing the MILO integration block.
 - [x] Unlock
 - [x] Calendar
 - [x] Trophy / rewards / certificates
+- [x] Traveler — official moving player marker for platform course maps
 
 ## Assets that MUST be created before closing this block
 - [ ] Error / Oops — friendly, not dramatically sad
@@ -48,10 +49,15 @@ This file is the source of truth for closing the MILO integration block.
 - [x] Central score-to-MILO feedback rule
 - [x] Reusable MiloCompanion component with Hero / Companion / Reaction sizes
 - [x] Pending-art protection so missing PNGs do not render broken images
+- [x] Register Traveler Milo as the official platform course-map character
 - [x] Connect MiloCompanion to FeedbackCard
 - [x] Connect Speaking AI states
 - [x] Connect Writing AI states
 - [x] Connect student dashboard to real progress
+- [ ] Connect Traveler Milo to every platform course map
+- [ ] Animate Traveler Milo moving node-to-node as activities are completed/unlocked
+- [ ] Persist Traveler Milo at the learner's current/latest unlocked node
+- [ ] Traveler Milo must not replace the node state: locked/current/completed status remains independently visible
 - [ ] Connect lesson player / exercises
 - [ ] Connect unlock and retry flow (80-point rule)
 - [ ] Connect gamification / streaks / rewards
@@ -62,6 +68,9 @@ This file is the source of truth for closing the MILO integration block.
 - [ ] Verify responsive behavior and accessibility
 - [ ] Verify no broken asset paths
 - [ ] Run final end-to-end verification of the MILO block
+
+## Course map rule — locked
+Traveler Milo is the student's avatar/companion on all self-study platform course maps. He sits at the learner's current node and moves visually from point to point when progress unlocks the next activity. The map itself keeps its own completed/current/locked visual states, while Traveler Milo indicates the learner's position. His position must come from persisted learner progress so refreshing or returning to the course places him back on the correct node. Movement should feel playful (walk/hop/slide with a short arrival reaction) without delaying access to the newly unlocked activity. This rule applies to platform courses such as English A1 and future French A1/self-study routes; university course navigation is not automatically converted to this map behavior unless explicitly designed as a map.
 
 ## Integration behavior now established
 - AI feedback cards select Milo from the real score.
