@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/auth/session";
@@ -7,7 +6,8 @@ import { upsertProgress } from "@/lib/services/progress";
 const Input = z.object({
   lessonId: z.string().min(1),
   percent: z.number().min(0).max(100),
-  score: z.number().min(0).max(100).optional()
+  score: z.number().min(0).max(100).optional(),
+  gradedAttempt: z.boolean().optional().default(false)
 });
 
 export async function POST(request: Request) {
