@@ -54,12 +54,13 @@ This file is the source of truth for closing the MILO integration block.
 - [x] Connect Speaking AI states
 - [x] Connect Writing AI states
 - [x] Connect student dashboard to real progress
-- [ ] Connect Traveler Milo to every platform course map
+- [x] Connect Traveler Milo to the current self-study platform unit map route
 - [ ] Animate Traveler Milo moving node-to-node as activities are completed/unlocked
-- [ ] Persist Traveler Milo at the learner's current/latest unlocked node
-- [ ] Traveler Milo must not replace the node state: locked/current/completed status remains independently visible
-- [ ] Connect lesson player / exercises
-- [ ] Connect unlock and retry flow (80-point rule)
+- [x] Persist Traveler Milo at the learner's current/latest unlocked node through stored progress
+- [x] Traveler Milo does not replace node state: locked/current/completed status remains independently visible
+- [x] Connect graded lesson sections to the shared progress/attempt flow
+- [x] Connect unlock and retry flow (80-point rule) at backend/shared progress level
+- [ ] Replace temporary score bridge with real exercise-generated scores in every activity engine
 - [ ] Connect gamification / streaks / rewards
 - [ ] Connect certificates
 - [ ] Connect calendar/deadlines
@@ -70,15 +71,17 @@ This file is the source of truth for closing the MILO integration block.
 - [ ] Run final end-to-end verification of the MILO block
 
 ## Course map rule — locked
-Traveler Milo is the student's avatar/companion on all self-study platform course maps. He sits at the learner's current node and moves visually from point to point when progress unlocks the next activity. The map itself keeps its own completed/current/locked visual states, while Traveler Milo indicates the learner's position. His position must come from persisted learner progress so refreshing or returning to the course places him back on the correct node. Movement should feel playful (walk/hop/slide with a short arrival reaction) without delaying access to the newly unlocked activity. This rule applies to platform courses such as English A1 and future French A1/self-study routes; university course navigation is not automatically converted to this map behavior unless explicitly designed as a map.
+Traveler Milo is the student's avatar/companion on all self-study platform course maps. He sits at the learner's current node and moves visually from point to point when progress unlocks the next activity. The map itself keeps its own completed/current/locked visual states, while Traveler Milo indicates the learner's position. His position comes from persisted learner progress so refreshing or returning to the course places him back on the correct node. Movement should feel playful (walk/hop/slide with a short arrival reaction) without delaying access to the newly unlocked activity. This rule applies to platform courses such as English A1 and future French A1/self-study routes; university course navigation is not automatically converted to this map behavior unless explicitly designed as a map.
 
 ## Integration behavior now established
 - AI feedback cards select Milo from the real score.
 - Speaking uses Speaking → Recording → Thinking → score reaction.
 - Writing uses Writing → Thinking → score reaction.
-- AI failures preserve the student's work/recording flow and use the registered Error state when its final art is available.
 - Student dashboard selects Milo from actual lesson progress rather than random messages.
-- Pending art never produces a broken image.
+- Graded lesson sections share the 80-point / two-attempt progress flow.
+- The self-study unit map reads stored progress and places Traveler Milo on the current node.
+- Completed/current/locked node states remain visible independently of Milo.
+- Pending art is suppressed by MiloCompanion until its final asset is registered as ready.
 
 ## Closure rule
 Do NOT mark this block closed until every checkbox above is complete and the final end-to-end verification passes.
