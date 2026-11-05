@@ -9,6 +9,7 @@ export default function AdminPage() {
         <Link href="/admin/units">Units</Link>
         <Link href="/admin/media">Media</Link>
         <Link href="/admin/ai-generator">AI Generator</Link>
+        <Link href="/admin/teacher-students">Maestros y alumnos</Link>
       </aside>
       <main className="container">
         <h1>Admin dashboard</h1>
