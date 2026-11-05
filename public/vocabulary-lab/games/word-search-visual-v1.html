@@ -111,9 +111,17 @@ board.addEventListener("click",e=>{
  }
 });
 $("hint").onclick=()=>{if(!state||state.finished)return;let pending=state.placed.find(w=>!w.found);if(!pending)return;state.score=Math.max(0,state.score-5);state.hints++;save();const cell=board.children[pending.cells[0]],x=pending.cells[0]%N+1,y=Math.floor(pending.cells[0]/N)+1;cell.style.outline="3px solid #e4a02d";msg("💡 "+pending.en+" comienza en fila "+y+", columna "+x+". −5 puntos.");$("points").textContent="⭐ "+Math.max(0,state.score)+" pts"};
-$("new").onclick=()=>{if(state&&!state.finished&&!confirm("¿Empezar un nuevo tablero? Se reemplazará la partida guardada."))return;game()};$("again").onclick=game;$("close").onclick=()=>{$("celebrate").hidden=true};function changeSetting(event,field){
+function allowReplacement(){
+ if(!state)return true;
+ if(state.finished&&!state.synced){
+  return confirm("Este resultado todavía no se ha enviado a tu cuenta. ¿Quieres reemplazarlo? Si continúas, perderás el intento pendiente.");
+ }
+ return state.finished||confirm("¿Empezar un nuevo tablero? Se reemplazará la partida guardada.");
+}
+$("new").onclick=()=>{if(allowReplacement())game()};
+$("again").onclick=()=>{if(allowReplacement())game()};$("close").onclick=()=>{$("celebrate").hidden=true};function changeSetting(event,field){
  const previous=state?.[field];
- if(state&&!state.finished&&!confirm("¿Cambiar el "+(field==="level"?"nivel":"idioma")+"? Se iniciará un tablero nuevo para esta cuenta.")){
+ if(state&&!allowReplacement()){
   event.target.value=previous;return
  }
  game();
