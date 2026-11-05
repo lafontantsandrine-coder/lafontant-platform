@@ -30,6 +30,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid or incomplete game result" }, { status: 400 });
   }
   const data = parsed.data;
+  // This cannot verify that words were really found, but it rejects impossible
+  // client-reported totals under the game's published scoring rules.
+  const maximumScore = Math.max(0, 200 - data.hints * 5);
+  if (data.score > maximumScore) {
+    return NextResponse.json({ error: "Invalid score for hint count" }, { status: 400 });
+  }
   // The score is a client-reported practice metric, not a verified examination grade.
   const submissionId = "ws_" + data.attemptId;
   const existing = await prisma.submission.findUnique({
