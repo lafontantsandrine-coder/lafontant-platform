@@ -12,7 +12,7 @@ export default async function TeacherPage() {
     <main className="container">
       <h1>Teacher dashboard</h1>
       <section className="grid">
-        <article className="card"><h3>Student progress</h3><p className="muted">View completion and scores.</p></article>
+        <article className="card"><h3>Student progress</h3><p className="muted">View completion and scores.</p><a href="/teacher/vocabulary-word-search">🔎 Ver resultados de Word Search</a></article>
         <article className="card"><h3>Assignments</h3><p className="muted">Create and review homework.</p></article>
         <article className="card"><h3>Feedback</h3><p className="muted">Review speaking and writing results.</p></article>
       </section>
