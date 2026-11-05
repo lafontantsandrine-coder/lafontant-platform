@@ -50,6 +50,7 @@ export default async function DashboardPage() {
             <h1>Welcome back, {user?.name || "student"}.</h1>
             <p>Your progress is waiting for you. Pick up right where you left off.</p>
             <Link className="btn btn-primary" href="/courses">Continue learning</Link>
+            <Link className="btn" href="/vocabulary-lab" style={{ marginLeft: 10 }}>🎮 Vocabulary Lab</Link>
           </div>
           <MiloCompanion state={milo.state} size="hero" message={milo.message} />
         </div>
