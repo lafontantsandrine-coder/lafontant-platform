@@ -2,11 +2,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySessionToken } from "@/lib/auth/token";
 
-const protectedPaths = ["/dashboard", "/teacher", "/admin"];
+const protectedPaths = [
+  "/dashboard", "/teacher", "/admin",
+  "/vocabulary-lab"
+];
+const protectedExactFiles = new Set([
+  "/vocabulary-lab/games/word-search-visual-v1.html"
+]);
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  const needsAuth = protectedPaths.some((path) => pathname.startsWith(path));
+  const needsAuth = protectedExactFiles.has(pathname) ||
+    protectedPaths.some((path) => pathname === path || pathname.startsWith(path + "/"));
 
   if (!needsAuth) return NextResponse.next();
 
@@ -33,5 +40,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/teacher/:path*", "/admin/:path*"]
+  matcher: ["/dashboard/:path*", "/teacher/:path*", "/admin/:path*", "/vocabulary-lab/:path*"]
 };
