@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 
 const Result = z.object({
+  attemptId: z.string().uuid(),
   level: z.enum(["A1", "A2", "B1", "B2", "C1"]),
   language: z.enum(["en", "es", "fr"]),
   found: z.number().int().min(0).max(20),
@@ -30,8 +31,22 @@ export async function POST(request: Request) {
   }
   const data = parsed.data;
   // The score is a client-reported practice metric, not a verified examination grade.
-  const result = await prisma.submission.create({
+  const submissionId = "ws_" + data.attemptId;
+  const existing = await prisma.submission.findUnique({
+    where: { id: submissionId },
+    select: { id: true, userId: true, type: true, createdAt: true, score: true }
+  });
+  if (existing) {
+    if (existing.userId !== session.userId || existing.type !== "VOCAB_WORD_SEARCH") {
+      return NextResponse.json({ error: "Attempt already registered" }, { status: 409 });
+    }
+    return NextResponse.json({ saved: true, alreadySaved: true, result: existing }, { status: 200 });
+  }
+  let result;
+  try {
+    result = await prisma.submission.create({
     data: {
+      id: submissionId,
       type: "VOCAB_WORD_SEARCH",
       prompt: "Word Search Adventure - " + data.language + " - " + data.level,
       originalText: JSON.stringify({ level: data.level, language: data.language, found: data.found, seconds: data.seconds, hints: data.hints }),
@@ -40,7 +55,21 @@ export async function POST(request: Request) {
       userId: session.userId
     },
     select: { id: true, createdAt: true, score: true }
-  });
+    });
+  } catch (error) {
+    // Concurrent requests with the same attempt ID must never add another score.
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "P2002") {
+      const duplicate = await prisma.submission.findUnique({
+        where: { id: submissionId },
+        select: { id: true, userId: true, type: true, createdAt: true, score: true }
+      });
+      if (duplicate?.userId === session.userId && duplicate.type === "VOCAB_WORD_SEARCH") {
+        return NextResponse.json({ saved: true, alreadySaved: true, result: duplicate });
+      }
+      return NextResponse.json({ error: "Attempt already registered" }, { status: 409 });
+    }
+    throw error;
+  }
   return NextResponse.json({ saved: true, result }, { status: 201 });
 }
 
