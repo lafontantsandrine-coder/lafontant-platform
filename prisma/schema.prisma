@@ -30,6 +30,8 @@ model User {
   submissions  Submission[]
   certificates Certificate[]
   pointTransactions PointTransaction[]
+  assignedStudents TeacherStudentAccess[] @relation("AssignedTeacher")
+  assignedTeachers TeacherStudentAccess[] @relation("AssignedStudent")
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }
@@ -162,4 +164,16 @@ model PointTransaction {
   createdAt DateTime @default(now())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TeacherStudentAccess {
+  id        String   @id @default(cuid())
+  teacherId String
+  studentId String
+  teacher   User     @relation("AssignedTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  student   User     @relation("AssignedStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([teacherId, studentId])
+  @@index([studentId])
 }
