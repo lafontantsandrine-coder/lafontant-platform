@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Code Breaker · Vocabulary Lab · Lafontant Languages</title>
+<style>
+:root{font-family:Inter,system-ui,Arial,sans-serif;color:#153155;background:#edf4fc}*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #ffb84a;outline-offset:2px}.app{max-width:1100px;margin:auto;padding:18px}.top,.panel{background:white;border:1px solid #d9e5f1;border-radius:19px;box-shadow:0 6px 24px #173b6412}.top{padding:18px;display:flex;gap:15px;align-items:center;justify-content:space-between;flex-wrap:wrap}h1{font-size:clamp(24px,4vw,36px);margin:0;color:#184c91}.sub{color:#54708c;margin-top:5px}.status{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#e7f1ff;padding:9px 12px;border-radius:999px;font-weight:750}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr);gap:15px;margin-top:16px}.panel{padding:20px}.tag{font-weight:800;color:#2560a1;text-transform:uppercase;font-size:12px;letter-spacing:1px}.mission{font-size:24px;margin:8px 0 6px}.instruction{font-size:16px;color:#45617c;line-height:1.45}.cipher{margin:18px 0;padding:24px 13px;border:2px dashed #83b2ed;border-radius:17px;background:#f2f8ff;text-align:center;font-size:clamp(24px,4.7vw,40px);font-weight:900;letter-spacing:4px;overflow-wrap:anywhere;color:#123b75}.answer{width:100%;border:2px solid #b5cce7;border-radius:13px;padding:14px;font-size:19px;color:#143456;background:#fff}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary,.key{border:0;border-radius:12px;padding:12px 15px;font-weight:800}.primary{background:#1755a4;color:#fff}.secondary{background:#e9f1fc;color:#164779}.key{background:#edf4fc;color:#164779;min-width:42px}.keys{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.feedback{min-height:60px;border-radius:13px;padding:13px;margin-top:12px;background:#f0f6fd;line-height:1.4}.feedback.good{background:#e6f7eb;color:#14613c}.feedback.bad{background:#fff0e8;color:#90410d}.guide{white-space:pre-line;line-height:1.85;background:#f4f8fe;padding:14px;border-radius:13px;margin-top:12px;font-weight:650;overflow-wrap:anywhere}.progress{height:11px;background:#dce8f6;border-radius:100px;overflow:hidden;margin:12px 0}.bar{height:100%;width:0;background:#2783dc;transition:width .25s}.mission-list{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:14px}.dot{border:0;border-radius:9px;background:#e9f0f9;padding:10px 0;font-weight:750;color:#3d638a}.dot.done{background:#d7f4e5;color:#17643f}.dot.current{outline:3px solid #266cbd}.small{font-size:13px;color:#627a91}.footer{margin:16px 0;color:#658099;text-align:center;font-size:13px}@media(max-width:750px){.app{padding:9px}.layout{grid-template-columns:1fr;gap:10px;margin-top:10px}.panel{padding:15px}.cipher{margin:12px 0;padding:18px 8px}.top{padding:14px}.mission-list{grid-template-columns:repeat(6,1fr)}.primary,.secondary{flex:1}.guide{font-size:14px}}
+</style></head><body><main class="app">
+<header class="top"><div><div class="tag">Lafontant Languages · Vocabulary Lab</div><h1>🔐 Code Breaker</h1><div class="sub">12 misiones · símbolos, César y coordenadas · inglés ↔ español</div></div><div class="status"><span class="pill" id="level">Misión 1/12</span><span class="pill" id="score">0 puntos</span></div></header>
+<div class="layout"><section class="panel"><div class="tag" id="type"></div><h2 class="mission" id="name"></h2><p class="instruction" id="instruction"></p><div class="cipher" id="cipher"></div><label for="answer"><strong>Tu respuesta</strong> <span class="small">(en inglés o español)</span></label><input id="answer" class="answer" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Descifra la palabra"><div class="keys" id="keys" aria-label="Teclado"></div><div class="actions"><button class="primary" id="check">Comprobar</button><button class="secondary" id="hint">💡 Pista (−5 pts)</button><button class="secondary" id="skip">Saltar</button><button class="secondary" id="next" hidden>Siguiente →</button></div><div id="feedback" class="feedback" role="status" aria-live="polite">Descifra el mensaje y escribe la palabra.</div></section>
+<aside class="panel"><div class="tag">Tu progreso</div><h2 id="complete">0 de 12 resueltas</h2><div class="progress"><div class="bar" id="bar"></div></div><div class="small">Una respuesta correcta vale 10 puntos; cada pista resta 5 puntos de esa misión. Puedes volver a intentar sin perder puntos adicionales.</div><div class="mission-list" id="missions"></div><h3>Clave del descifrador</h3><div id="guide" class="guide"></div><div class="actions"><button class="secondary" id="restart">↻ Reiniciar juego</button></div></aside></div><p class="footer">Juego 35/50 · Los avances se conservan en este navegador.</p></main>
+<script>
+(function(){
+"use strict";
+const rows=[
+{kind:"symbols",word:"APPLE",es:"manzana",clue:"A fruit you can eat.",title:"The lost fruit"},
+{kind:"symbols",word:"HOUSE",es:"casa",clue:"A place where people live.",title:"Secret home"},
+{kind:"symbols",word:"WATER",es:"agua",clue:"You drink it every day.",title:"The blue clue"},
+{kind:"symbols",word:"SCHOOL",es:"escuela",clue:"A place where students learn.",title:"Classified classroom"},
+{kind:"caesar",word:"FRIEND",es:"amigo",shift:3,clue:"A person you trust and like.",title:"The hidden ally"},
+{kind:"caesar",word:"FAMILY",es:"familia",shift:5,clue:"Parents, children and relatives.",title:"The circle of trust"},
+{kind:"caesar",word:"MARKET",es:"mercado",shift:7,clue:"You can buy food here.",title:"Shopping mystery"},
+{kind:"caesar",word:"GARDEN",es:"jardín",shift:2,clue:"Flowers and plants grow here.",title:"The green signal"},
+{kind:"coords",word:"BOOK",es:"libro",clue:"You read its pages.",title:"Library coordinates"},
+{kind:"coords",word:"TRAIN",es:"tren",clue:"A vehicle that travels on rails.",title:"Railway message"},
+{kind:"coords",word:"MUSIC",es:"música",clue:"You listen to songs and melodies.",title:"Hidden melody"},
+{kind:"coords",word:"BRIDGE",es:"puente",clue:"It connects two sides of a river.",title:"The final crossing"}
+];
+const symbols="◆●▲■★☀☂☕♣♥♠✦✿☾☼♜♛♞♟☘⚑⚙⚡✈☯☮";
+const abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const map=Object.fromEntries([...abc].map((letter,i)=>[letter,[...symbols][i]]));
+const grid=["ABCDE","FGHIJ","KLMNO","PQRST","UVWXY","Z"];
+const $=id=>document.getElementById(id);
+const key="lafontant_vocab_code_breaker_v1";
+let state={index:0,solved:{},hinted:{},skipped:{}};
+try{const s=JSON.parse(localStorage.getItem(key)||"null");if(s&&Number.isInteger(s.index)&&s.index>=0&&s.index<rows.length)state={...state,...s}}catch(e){}
+function persist(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}}
+function norm(s){return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().replace(/[^A-Z]/g,"")}
+function encode(row){if(row.kind==="symbols")return [...row.word].map(c=>map[c]).join(" ");
+if(row.kind==="caesar")return [...row.word].map(c=>abc[(abc.indexOf(c)+row.shift)%26]).join(" ");
+return [...row.word].map(c=>{let n=abc.indexOf(c);return (Math.floor(n/5)+1)+"-"+((n%5)+1)}).join(" / ")}
+function guide(row){if(row.kind==="symbols")return "Cada símbolo corresponde siempre a una letra.\n"+[...new Set([...row.word])].map(x=>map[x]+" = "+x).slice(0,2).join("     ")+"\nBusca el resto con las pistas.";if(row.kind==="caesar")return "Cifrado César: cada letra avanzó "+row.shift+" posiciones.\nPara descifrar, retrocede "+row.shift+".\nEjemplo: A → "+abc[row.shift]+ " al cifrar.";return "Coordenadas = fila-columna.\n1: A B C D E\n2: F G H I J\n3: K L M N O\n4: P Q R S T\n5: U V W X Y\n6: Z\nEjemplo: 2-3 = H."}
+function score(){return Object.values(state.solved).reduce((n,v)=>n+v,0)}
+function render(){let row=rows[state.index],done=state.solved[state.index]!==undefined;
+$("level").textContent="Misión "+(state.index+1)+"/12";$("score").textContent=score()+" puntos";
+$("type").textContent=row.kind==="symbols"?"🔣 Cifrado de símbolos":row.kind==="caesar"?"🔠 Cifrado César":"🧭 Cifrado de coordenadas";
+$("name").textContent=row.title;$("instruction").textContent="Decode the secret word. "+row.clue+" Puedes responder en inglés o español.";
+$("cipher").textContent=encode(row);$("guide").textContent=guide(row);$("answer").value="";
+$("answer").disabled=done;$("check").hidden=done;$("hint").hidden=done;$("skip").hidden=done;$("next").hidden=!done&&!(state.skipped[state.index]);$("next").textContent=state.index===11?"Ver resultados →":"Siguiente →";
+$("feedback").className="feedback"+(done?" good":"");$("feedback").textContent=done?"✅ Resuelta: "+row.word+" = "+row.es+". Ganaste "+state.solved[state.index]+" puntos.":state.skipped[state.index]?"Esta misión fue saltada. Puedes volver y resolverla.":"Descifra el mensaje y escribe la palabra.";
+$("keys").innerHTML="";for(const letter of [...abc]){let b=document.createElement("button");b.type="button";b.className="key";b.textContent=letter;b.setAttribute("aria-label","Escribir "+letter);b.onclick=()=>{if(!done){$("answer").value+=letter;$("answer").focus()}};$("keys").appendChild(b)}
+let erase=document.createElement("button");erase.className="key";erase.textContent="⌫";erase.setAttribute("aria-label","Borrar última letra");erase.onclick=()=>{$("answer").value=$("answer").value.slice(0,-1)};$("keys").appendChild(erase);
+const count=Object.keys(state.solved).length;$("complete").textContent=count+" de 12 resueltas";$("bar").style.width=(count/12*100)+"%";
+$("missions").innerHTML="";rows.forEach((r,i)=>{let b=document.createElement("button");b.className="dot"+(state.solved[i]!==undefined?" done":"")+(i===state.index?" current":"");b.textContent=i+1;b.title="Misión "+(i+1);b.setAttribute("aria-label","Ir a misión "+(i+1));b.onclick=()=>{state.index=i;persist();render()};$("missions").appendChild(b)});
+if(count===12){$("feedback").className="feedback good";$("feedback").textContent="🏆 ¡Completaste las 12 misiones! Puntuación final: "+score()+" / 120. Puedes revisar las misiones o reiniciar."}
+}
+function check(){let i=state.index,row=rows[i];if(state.solved[i]!==undefined)return;let value=norm($("answer").value);
+if(!value){$("feedback").className="feedback bad";$("feedback").textContent="Escribe una respuesta para continuar.";return}
+if(value===norm(row.word)||value===norm(row.es)){state.solved[i]=state.hinted[i]?5:10;delete state.skipped[i];persist();render();return}
+$("feedback").className="feedback bad";$("feedback").textContent="Todavía no. Revisa la clave y la pista; vuelve a intentarlo."}
+$("check").onclick=check;$("answer").addEventListener("keydown",e=>{if(e.key==="Enter")check()});
+$("hint").onclick=()=>{let i=state.index,row=rows[i];state.hinted[i]=true;persist();$("feedback").className="feedback";$("feedback").textContent="💡 "+row.clue+" Primera letra: "+row.word[0]+". Esta misión valdrá 5 puntos."};
+$("skip").onclick=()=>{state.skipped[state.index]=true;persist();if(state.index<rows.length-1){state.index++;persist();render()}else{$("feedback").textContent="Última misión saltada. Selecciona una misión pendiente para continuar."}};
+$("next").onclick=()=>{let next=rows.findIndex((r,i)=>i>state.index&&state.solved[i]===undefined);if(next<0)next=rows.findIndex((r,i)=>state.solved[i]===undefined);if(next>=0){state.index=next;persist();render()}else{$("feedback").className="feedback good";$("feedback").textContent="🏆 ¡Todas las misiones completadas! Puntuación: "+score()+"/120."}};
+$("restart").onclick=()=>{if(confirm("¿Reiniciar las 12 misiones y borrar el progreso guardado?")){state={index:0,solved:{},hinted:{},skipped:{}};persist();render()}};
+render();
+})();
+</script></body></html>
