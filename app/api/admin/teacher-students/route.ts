@@ -29,7 +29,11 @@ export async function GET() {
     },
     orderBy: { createdAt: "desc" }, take: 500
   });
-  return NextResponse.json({ assignments });
+  const [teachers, students] = await Promise.all([
+    prisma.user.findMany({ where: { role: "TEACHER" }, select: { id: true, name: true, email: true }, orderBy: { email: "asc" }, take: 1000 }),
+    prisma.user.findMany({ where: { role: "STUDENT" }, select: { id: true, name: true, email: true }, orderBy: { email: "asc" }, take: 5000 })
+  ]);
+  return NextResponse.json({ assignments, teachers, students });
 }
 export async function POST(request: Request) {
   if (!await authorize()) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
