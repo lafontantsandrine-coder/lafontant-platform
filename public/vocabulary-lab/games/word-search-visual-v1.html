@@ -52,7 +52,7 @@ const targetText=row=>$("language").value==="es"?row[1]:row[0];
 const clueText=row=>$("language").value==="es"?row[0]:row[1];
 const $=id=>document.getElementById(id),N=16,ABC="ABCDEFGHIJKLMNOPQRSTUVWXYZ",directions=[[1,0],[0,1],[1,1],[-1,1],[-1,0],[0,-1],[-1,-1],[1,-1]];let state=null,tick=null,drag=null,keyboardStart=null,sending=false,currentUserId=null;
 const SAVE_PREFIX="lafontant_word_search_v4_";
-const saveKey=()=>SAVE_PREFIX+(currentUserId??"guest");
+const saveKey=()=>SAVE_PREFIX+(currentUserId??"guest")+"_"+$("language").value;
 const newAttemptId=()=>crypto.randomUUID();
 async function authenticatedUser(){
  try{
@@ -84,8 +84,19 @@ async function sendResult(){
  finally{sending=false;showRetry()}
 }
 function save(){if(!state)return;try{localStorage.setItem(saveKey(),JSON.stringify({version:4,userId:state.userId,attemptId:state.attemptId,level:state.level,language:state.language,grid:state.grid,placed:state.placed,seconds:state.seconds,score:state.score,found:state.found,hints:state.hints,finished:state.finished,synced:!!state.synced}))}catch(e){}}
-function resume(){let x;try{x=JSON.parse(localStorage.getItem(saveKey())||"null");if(!x){const legacyKey="lafontant_word_search_v3_"+(currentUserId??"guest");const previous=JSON.parse(localStorage.getItem(legacyKey)||"null");if(previous?.version===3&&previous.userId===currentUserId){x={...previous,version:4,attemptId:newAttemptId()};localStorage.setItem(saveKey(),JSON.stringify(x))}}}catch(e){return false}if(!x||x.version!==4||x.userId!==currentUserId||typeof x.attemptId!=="string"||!(x.language==="fr"?frPools[x.level]:pools[x.level])||!["en","es","fr"].includes(x.language)||!Array.isArray(x.grid)||x.grid.length!==N*N||!Array.isArray(x.placed)||x.placed.length!==20||!x.placed.every(w=>typeof w.en==="string"&&typeof w.es==="string"&&Array.isArray(w.cells)&&w.cells.every(n=>Number.isInteger(n)&&n>=0&&n<N*N)))return false;
-$("level").value=x.level;$("language").value=x.language;const seconds=Number.isFinite(x.seconds)?Math.max(0,x.seconds):0;state={...x,start:Date.now()-seconds*1000,seconds,score:Math.max(0,10*x.placed.filter(w=>w.found).length-5*(Number(x.hints)||0)),found:x.placed.filter(w=>w.found).length,hints:Number(x.hints)||0,finished:!!x.finished,synced:!!x.synced};showTime();applyLanguage();render();showRetry();if(!state.finished){tick=setInterval(()=>{if(!state||state.finished)return;state.seconds=Math.floor((Date.now()-state.start)/1000);showTime();if(state.seconds%5===0)save()},500)}msg(state.finished?"Partida completada. Puedes iniciar un nuevo reto.":"✅ Recuperamos tu partida guardada.");if(state.finished&&!state.synced)sendResult();return true}
+function resume(){let x;try{
+ x=JSON.parse(localStorage.getItem(saveKey())||"null");
+ if(!x){
+  const oldV4=JSON.parse(localStorage.getItem(SAVE_PREFIX+(currentUserId??"guest"))||"null");
+  const oldV3=JSON.parse(localStorage.getItem("lafontant_word_search_v3_"+(currentUserId??"guest"))||"null");
+  const previous=oldV4?.version===4?oldV4:oldV3;
+  if(previous?.userId===currentUserId&&previous.language===$("language").value&&[3,4].includes(previous.version)){
+    x={...previous,version:4,attemptId:previous.attemptId||newAttemptId()};
+    localStorage.setItem(saveKey(),JSON.stringify(x));
+  }
+ }
+}catch(e){return false}if(!x||x.version!==4||x.userId!==currentUserId||typeof x.attemptId!=="string"||!(x.language==="fr"?frPools[x.level]:pools[x.level])||!["en","es","fr"].includes(x.language)||!Array.isArray(x.grid)||x.grid.length!==N*N||!Array.isArray(x.placed)||x.placed.length!==20||!x.placed.every(w=>typeof w.en==="string"&&typeof w.es==="string"&&Array.isArray(w.cells)&&w.cells.every(n=>Number.isInteger(n)&&n>=0&&n<N*N)))return false;
+$("level").value=x.level;$("language").value=x.language;const seconds=Number.isFinite(x.seconds)?Math.max(0,x.seconds):0;state={...x,start:Date.now()-seconds*1000,seconds,score:Math.max(0,10*x.placed.filter(w=>w.found).length-5*(Number(x.hints)||0)),found:x.placed.filter(w=>w.found).length,hints:Number(x.hints)||0,finished:!!x.finished,synced:!!x.synced};showTime();applyLanguage();render();showRetry();if(!state.finished){tick=setInterval(()=>{if(!state||state.finished)return;state.seconds=Math.floor((Date.now()-state.start)/1000);showTime();if(state.seconds%5===0)save()},500)}msg(state.finished?(uiIsFrench()?"Partie terminée. Tu peux commencer un nouveau défi.":"Partida completada. Puedes iniciar un nuevo reto."):(uiIsFrench()?"✅ Ta partie a été récupérée.":"✅ Recuperamos tu partida guardada."));if(state.finished&&!state.synced)sendResult();return true}
 function showRetry(){$("retry").hidden=!(state?.finished&&!state.synced&&!!currentUserId)}
 function msg(message,kind=""){$("feedback").className="feedback"+(kind?" "+kind:"");$("feedback").textContent=message}
 function render(){const board=$("board");board.innerHTML="";let foundSet=new Set(state.placed.filter(w=>w.found).flatMap(w=>w.cells));state.grid.forEach((letter,i)=>{let cell=document.createElement("button");cell.type="button";cell.className="cell"+(foundSet.has(i)?" found":"");cell.dataset.index=i;cell.textContent=letter;cell.setAttribute("aria-label","Fila "+(Math.floor(i/N)+1)+" columna "+(i%N+1)+" letra "+letter);board.appendChild(cell)});const words=$("words");words.innerHTML="";state.placed.forEach(w=>{let span=document.createElement("div");span.className="word"+(w.found?" done":"");span.textContent=uiIsFrench()?w.en+" · "+w.es:($("language").value==="es"?w.en:w.es);words.appendChild(span)});$("count").textContent=state.found+" / 20";$("points").textContent="⭐ "+Math.max(0,state.score)+" pts";$("bar").style.width=(state.found/20*100)+"%"}
@@ -159,7 +170,7 @@ $("again").onclick=()=>{if(allowReplacement())game()};$("close").onclick=()=>{$(
  if(state&&!allowReplacement()){
   event.target.value=previous;return
  }
- game();
+ if(field==="language"){clearInterval(tick);state=null;if(!resume())game()}else game();
 }
 $("retry").onclick=sendResult;
 $("zoom").onclick=()=>{
@@ -168,7 +179,7 @@ $("zoom").onclick=()=>{
  keyboardStart=null;drag=null;render();
  $("zoom").setAttribute("aria-pressed",String(expanded));
  $("zoom").textContent=uiIsFrench()?(expanded?"🔍 Taille normale":"🔍 Agrandir la grille"):(expanded?"🔍 Tamaño normal":"🔍 Ampliar cuadrícula");
- msg(expanded?"Modo ampliado: desliza para moverte y toca dos letras para seleccionar.":"Modo normal: arrastra o toca dos letras para seleccionar.");
+ msg(uiIsFrench()?(expanded?"Grille agrandie : fais défiler et touche deux lettres.":"Taille normale : fais glisser ou touche deux lettres."):(expanded?"Modo ampliado: desliza para moverte y toca dos letras para seleccionar.":"Modo normal: arrastra o toca dos letras para seleccionar."));
  frame.scrollLeft=0;frame.scrollTop=0;
 };
 document.addEventListener("visibilitychange",()=>{
