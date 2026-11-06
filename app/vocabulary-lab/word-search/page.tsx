@@ -9,6 +9,7 @@ export default async function WordSearchPage() {
     <main style={{ margin: 0, padding: 0, width: "100%", minHeight: "100dvh" }}>
       <nav style={{ display: "flex", gap: 14, alignItems: "center", padding: "10px 16px", background: "#eaf3fc" }}>
         <Link href="/vocabulary-lab">← Regresar a Vocabulary Lab</Link>
+        <Link href="/vocabulary-lab/results">📊 Mis resultados</Link>
         <strong style={{ color: "#185a9a" }}>Juego 1 · Word Search Adventure</strong>
       </nav>
       <iframe
