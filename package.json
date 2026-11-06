@@ -9,7 +9,8 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "test:word-search": "node scripts/test-word-search.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
