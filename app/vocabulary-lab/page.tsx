@@ -19,6 +19,7 @@ export default async function VocabularyLabPage() {
           <p>Encuentra 20 palabras en una sopa de letras. Elige inglés o francés y tu nivel A1–C1.</p>
           <p style={{ color: "#536e83" }}>Guarda la partida en este navegador y registra el resultado al completarla.</p>
           <Link className="btn btn-primary" href="/vocabulary-lab/word-search">▶ Abrir Sopa de Letras</Link>
+          <Link className="btn" href="/vocabulary-lab/word-search?lang=fr" style={{ marginLeft: 12 }}>🇫🇷 Français · Chasse aux mots</Link>
           <Link className="btn" href="/vocabulary-lab/results" style={{ marginLeft: 12 }}>📊 Mis resultados</Link>
         </article>
       </section>
